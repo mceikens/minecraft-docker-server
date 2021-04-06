@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  minecraft:
+    container_name: minecraft_docker_server
+    build:
+      dockerfile: ./build/minecraft/Dockerfile
+      context: .
+      args:
+        JAVA_VERSION: ${JAVA_VERSION}
+        JAR_FILE: ${JAR_FILE}
+    privileged: true
+    working_dir: /bin/server
+    volumes:
+      - minecraft_server_volume:/bin/server
+    networks:
+      - minecraft_network
+    ports:
+      - ${EXPOSED_IP_ADDRESS}:${EXPOSED_PORT}:25565
+    restart: on-failure
+networks:
+  minecraft_network:
+    external: true
+volumes:
+  minecraft_server_volume:
+    external: true
